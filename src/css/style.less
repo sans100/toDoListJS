@@ -39,6 +39,9 @@ ol, ul {
 	outline: 0;
 }
 
+@baseColor: #555;
+@baseFontSize: 16px;
+
 // mixins
 .imgIcon(@width: 37px, @height: 37px, @bgSize: 130px 90px) {
     background: url(../img/btn_icon.png) no-repeat;
@@ -86,13 +89,13 @@ body {
         position: relative;
         background-color: #f2f2f2;
         padding: 21px;
-        font-size: 16px;
+        font-size: @baseFontSize;
         border-bottom: 1px solid #c6c6c6;
         input {
             background: transparent;
             border: none;
-            font-size: 16px;
-            color: #555;
+            font-size: @baseFontSize;
+            color: @baseColor;
         }
         .input-Date-Box {
             input[type="date"] {
@@ -140,8 +143,8 @@ body {
                 position: relative;
                 border-bottom: 1px solid #ccc;
                 padding: 8px 21px;
-                font-size: 16px;
-                color: #555555;
+                font-size: @baseFontSize;
+                color: @baseColor;
                 label, span, i, .date-box {
                     display: inline-block;
                     vertical-align: middle;
@@ -169,7 +172,7 @@ body {
                     margin-left: 10px;
                     span {
                         display: block;
-                        font-size: 14px;
+                        font-size: @baseFontSize - 2px;
                         + span {
                             &:before {
                                 content: "";
@@ -232,9 +235,9 @@ body {
         }
         .add_form {
             padding: 8px;
-            font-size: 14px;
+            font-size: @baseFontSize - 2px;
             input {
-                font-size: 14px;
+                font-size: @baseFontSize - 2px;
             }
             .input-Date-Box {
                 input[type="date"] {
@@ -263,7 +266,7 @@ body {
                         margin-left: 0;
                         span {
                             font-size: 12px;
-                            &.date-start {
+                            + span {
                                 &:before {
                                     .centerPos(16, 29);
                                     height: 5px;
@@ -272,7 +275,7 @@ body {
                             }
                         }
                     }
-                    span {
+                    > span {
                         &.work {
                             margin-left: 10px;
                             width: calc(100% - 154px);
