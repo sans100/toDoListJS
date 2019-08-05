@@ -145,6 +145,7 @@ lighten(#b17261, 30%) // #e4cdc7
 #footer {
     color: @var; // red
 }
+```
 
 ## 참고
 
