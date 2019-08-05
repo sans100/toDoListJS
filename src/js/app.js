@@ -16,7 +16,7 @@ function workModify() {
     workList.innerText = newText;
 }
 function workRemove() {
-    let removeOk = confirm('삭제할래요?');
+    let removeOk = confirm('삭제 할 겁니까?');
     if(removeOk === true) {
         let removeId = this.id.replace('rem_', '');
         document.getElementById('li_' + removeId).style.display = 'none';
