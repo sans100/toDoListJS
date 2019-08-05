@@ -294,3 +294,41 @@ body {
         }
     }
 }
+
+// less color function
+
+.less-func {
+    background-color: #fff;
+    padding: 30px 100px;
+    h2 {
+        font-weight: normal;
+        margin-bottom: 5px;
+    }
+    div {
+        @testColor : #305ab4;
+        margin-bottom: 20px;
+        span {
+            display: inline-block;
+            width: 100px;
+            height: 50px;
+            &.default {
+                background-color: @testColor;
+            }
+        }
+        &.saturate {
+            .bundle {
+                background-color: saturate(@testColor, 50%);
+            }
+        }
+        &.lighten {
+            .bundle {
+                background-color: lighten(@testColor, 30%);
+            }
+        }
+        &.fadeout {
+            .bundle {
+                background-color: fadeout(@testColor, 30%);
+            }
+        }
+    }
+}
