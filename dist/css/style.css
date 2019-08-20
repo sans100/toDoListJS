@@ -199,7 +199,7 @@ body {
   border-bottom: 1px solid #ccc;
   padding: 8px 21px;
   font-size: 16px;
-  color: #555555;
+  color: #555;
 }
 .wrap .list ul li label,
 .wrap .list ul li span,
@@ -322,14 +322,14 @@ body {
   .wrap .list ul li .date-box span {
     font-size: 12px;
   }
-  .wrap .list ul li .date-box span.date-start:before {
+  .wrap .list ul li .date-box span + span:before {
     position: absolute;
     top: 16px;
     left: 29px;
     height: 5px;
     border-left: 1px solid #999;
   }
-  .wrap .list ul li span.work {
+  .wrap .list ul li > span.work {
     margin-left: 10px;
     width: calc(100% - 154px);
   }
@@ -339,4 +339,32 @@ body {
   .wrap .list ul li i.delete {
     right: 5px;
   }
+}
+.less-func {
+  background-color: #fff;
+  padding: 30px 100px;
+}
+.less-func h2 {
+  font-weight: normal;
+  margin-bottom: 5px;
+}
+.less-func div {
+  margin-bottom: 20px;
+}
+.less-func div span {
+  display: inline-block;
+  width: 100px;
+  height: 50px;
+}
+.less-func div span.default {
+  background-color: #305ab4;
+}
+.less-func div.saturate .bundle {
+  background-color: #0049e4;
+}
+.less-func div.lighten .bundle {
+  background-color: #99b1e4;
+}
+.less-func div.fadeout .bundle {
+  background-color: rgba(48, 90, 180, 0.7);
 }

@@ -1,101 +1,110 @@
-function doneWork() {
-    let workListId = this.parentElement.parentElement.id.replace('li_', '');
-    let workList = document.getElementById('li_' + workListId);
-    let workListParentType = workList.parentElement;
-    if (workListParentType == donelist) {
-        todolist.appendChild(workList);
-    } else {
-        donelist.appendChild(workList);
-    }
-};
-function workModify() {
-    let newText = prompt('수정하시오!');
-    let modifyId = this.id.replace('mod_', '');
-    let workList = document.getElementById('work_' + modifyId);
-    if(!newText.trim()) return false;
-    workList.innerText = newText;
-}
-function workRemove() {
-    let removeOk = confirm('삭제 할 겁니까?');
-    if(removeOk === true) {
-        let removeId = this.id.replace('rem_', '');
-        document.getElementById('li_' + removeId).style.display = 'none';
-    } else {
-        return false;
-    }
-}
-function mouseOver() {
-    let workListId = this.id.replace('li_', '');
-    let modify = document.getElementById('mod_' + workListId);
-    let remove = document.getElementById('rem_' + workListId);
-    modify.style.visibility = 'visible';
-    remove.style.visibility = 'visible';
-};
-function mouseOut() {
-    let workListId = this.id.replace('li_', '');
-    let modify = document.getElementById('mod_' + workListId);
-    let remove = document.getElementById('rem_' + workListId);
-    modify.style.visibility = 'hidden';
-    remove.style.visibility = 'hidden';
-};
-function workAddEvent(listUl, workText, startDateText, endDateText) {
-    let date = new Date();
-    let id = "" + date.getHours() + date.getMinutes() + date.getSeconds() + date.getMilliseconds();
-    let workList = document.createElement('li');
-    workList.id = 'li_' + id;
-    workList.addEventListener('mouseover', mouseOver);
-    workList.addEventListener('mouseout', mouseOut);
-    let workListText = document.createElement('span');
-    workListText.id = "work_" + id;
-    workListText.className = 'work';
-    workListText.innerText = workText;
-    let doneCheck = document.createElement('label');
-    let doneCheckBox = document.createElement('input');
-    doneCheckBox.type = 'checkbox';
-    let doneCheckImg = document.createElement('span');
-    doneCheckBox.onclick = doneWork;
-    let dateBox = document.createElement('div');
-    dateBox.className = 'date-box';
-    let startDate = document.createElement('span');
-    let endDate = document.createElement('span');
-    startDate.innerText = startDateText;
-    endDate.innerText = endDateText;
-    let modify = document.createElement('i');
-    modify.id = 'mod_' + id;
-    modify.className = 'modify';
-    modify.onclick = workModify;
-    let remove = document.createElement('i');
-    remove.id = 'rem_' + id;
-    remove.className = 'delete';
-    remove.onclick = workRemove;
+const todolistObj = document.querySelector('#todolist');
+const donelistObj = document.querySelector('#donelist');
+const sampleObj = todolistObj.querySelector('[sample]');
+sampleObj.parentNode.removeChild(sampleObj);
+let today = new Date();
+let dd = String(today.getDate()).padStart(2, '0');
+let mm = String(today.getMonth() + 1).padStart(2, '0');
+let yy = String(today.getFullYear());
+today = yy+'-'+mm+'-'+dd;
 
-    listUl.appendChild(workList);
-    workList.appendChild(doneCheck);
-    doneCheck.appendChild(doneCheckBox);
-    doneCheck.appendChild(doneCheckImg);
-    workList.appendChild(dateBox);
-    if (startDateText.length > 0) {
-        dateBox.appendChild(startDate);
+function doneWork(newWorkObj) {
+    let workListParentType = newWorkObj.parentElement;
+    if (workListParentType == donelist) {
+        todolistObj.appendChild(newWorkObj);
+    } else {
+        donelistObj.appendChild(newWorkObj);
     }
-    dateBox.appendChild(endDate);
-    workList.appendChild(workListText);
-    workList.appendChild(modify);
-    workList.appendChild(remove);
+    sortWork(todolistObj);
+    sortWork(donelistObj);
 };
-let inputStartDate = document.getElementById('input-Date-Start');
-let inputEndDate = document.getElementById('input-Date-End');
-let inputText = document.getElementById('input-Text');
-let btnAdd = document.getElementById('btn-Add');
+function modifyWork(newWorkObj) {
+    let newText = prompt('수정하시오!');
+    if(!newText.trim()) return false;
+    newWorkObj.querySelector('.work').innerText = newText;
+}
+function deleteWork(newWorkObj) {
+    newWorkObj.parentNode.removeChild(newWorkObj);
+}
+function sortWork(sortListObj) {
+
+    var lis = [];
+    for(var i = sortListObj.childNodes.length; i--;){
+        if(sortListObj.childNodes[i].nodeName === 'LI')
+            lis.push(sortListObj.childNodes[i]);
+        }
+
+    lis.sort(function(a, b){
+        const aDate = parseInt(a.querySelector('.end-date').textContent.split('-').join(''));
+        const bDate = parseInt(b.querySelector('.end-date').textContent.split('-').join(''));
+        const aAddTime = parseInt(a.getAttribute('add-time'));
+        const bAddTime = parseInt(b.getAttribute('add-time'));
+        console.log(aDate, aAddTime, bDate, bAddTime);
+        //.querySelector('#input-Date-End').textContent.split('-').join('');
+        if (aDate > bDate) {
+            return 1;
+        } else if (aDate < bDate) {
+            return -1;
+        } else {
+            if (aAddTime > bAddTime) {
+                return 1;
+            } else if (aAddTime < bAddTime) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+    });
+    for(var i = 0; i < lis.length; i++) {
+        console.log(lis[i]);
+        sortListObj.appendChild(lis[i]);
+    }
+}
+function workAddEvent(workText, startDateText, endDateText) {
+    const newWorkObj = sampleObj.cloneNode(true);
+    const labelObj = newWorkObj.querySelector('label');
+    const checkBoxObj = labelObj.querySelector('input[type="checkbox"]');
+    checkBoxObj.addEventListener('click', function() {
+        doneWork(newWorkObj);
+    });
+    const subjectObj = newWorkObj.querySelector('.work');
+    const startDateObj = newWorkObj.querySelector('.start-date');
+    const endDateObj = newWorkObj.querySelector('.end-date');
+    startDateObj.innerText = startDateText;
+    if (startDateText.length < 1 || startDateText === endDateText) {
+        startDateObj.parentNode.removeChild(startDateObj);
+    }
+    endDateObj.innerText = endDateText;
+    subjectObj.innerText = workText;
+    const modifyObj = newWorkObj.querySelector('.modify');
+    modifyObj.addEventListener('click', function() {
+        modifyWork(newWorkObj);
+    });
+    const deleteObj = newWorkObj.querySelector('.delete');
+    deleteObj.addEventListener('click', function() {
+        deleteWork(newWorkObj);
+    });
+    const addTime = (new Date()).getTime();
+    newWorkObj.setAttribute('add-time', addTime);
+    todolistObj.appendChild(newWorkObj);
+};
+
+const inputStartDate = document.getElementById('input-Date-Start');
+const inputEndDate = document.getElementById('input-Date-End');
+inputEndDate.value = today;
+inputStartDate.value = today;
+const inputText = document.getElementById('input-Text');
+const btnAdd = document.getElementById('btn-Add');
 inputText.focus();
 
 btnAdd.onclick = function() {
     let workText = inputText.value.trim();
-    let startDateText = inputStartDate.value;
-    let endDateText = inputEndDate.value;
-    //if (!workText || workText === "") return false;
+    let startDateText = inputStartDate.value.substr('2');
+    let endDateText = inputEndDate.value.substr('2');
     if (!workText) return false;
-    if (startDateText < endDateText) {
-        workAddEvent(document.getElementById('todolist'), workText, startDateText, endDateText);
+    if (startDateText <= endDateText) {
+        workAddEvent(workText, startDateText, endDateText);
+        sortWork(todolistObj);
     } else {
         alert('일정을 확인하시오!');
     }
