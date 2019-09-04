@@ -76,10 +76,12 @@ function modifyWork(newWorkObj) {
 };
 function removeWork(newWorkObj) {
     let removeAsk = confirm('삭제 하시겠습니다?');
-    if (removeAsk) newWorkObj.parentNode.removeChild(newWorkObj);
-    for (let i = 0; i < workDate.length; i++) {
-        if (workDate[i]['idx'] === newWorkObj['todoIndex']) {
-            workDate.splice(i, 1);
+    if (removeAsk) {
+        newWorkObj.parentNode.removeChild(newWorkObj);
+        for (let i = 0; i < workDate.length; i++) {
+            if (workDate[i]['idx'] === newWorkObj['todoIndex']) {
+                workDate.splice(i, 1);
+            }
         }
     }
 };

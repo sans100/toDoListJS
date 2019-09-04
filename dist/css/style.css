@@ -139,20 +139,20 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.wrap .add_form {
+.wrap .add-form {
   position: relative;
   background-color: #f2f2f2;
   padding: 21px;
   font-size: 16px;
   border-bottom: 1px solid #c6c6c6;
 }
-.wrap .add_form input {
+.wrap .add-form input {
   background: transparent;
   border: none;
   font-size: 16px;
   color: #555;
 }
-.wrap .add_form .input-Date-Box input[type="date"] {
+.wrap .add-form .input-date-box input[type="date"] {
   background: url(../img/btn_icon.png) no-repeat;
   background-position: 84px -62px;
   text-align: center;
@@ -162,24 +162,24 @@ body {
   letter-spacing: -0.06em;
   border-bottom: 1px solid #a0a0a0;
 }
-.wrap .add_form .input-Date-Box input[type="date"]::-webkit-clear-button,
-.wrap .add_form .input-Date-Box input[type="date"]::-webkit-inner-spin-button {
+.wrap .add-form .input-date-box input[type="date"]::-webkit-clear-button,
+.wrap .add-form .input-date-box input[type="date"]::-webkit-inner-spin-button {
   display: none;
 }
-.wrap .add_form .input-Date-Box input[type="date"]::-webkit-calendar-picker-indicator {
+.wrap .add-form .input-date-box input[type="date"]::-webkit-calendar-picker-indicator {
   opacity: 0;
   cursor: pointer;
 }
-.wrap .add_form .subject-box {
+.wrap .add-form .subject-box {
   width: 100%;
   margin-top: 10px;
 }
-.wrap .add_form .subject-box input {
+.wrap .add-form .subject-box input {
   padding: 0 8px;
   width: calc(100% - 113px);
   border-bottom: 1px solid #a0a0a0;
 }
-.wrap .add_form .confirm {
+.wrap .add-form .confirm {
   position: absolute;
   top: 40px;
   right: 15px;
@@ -191,7 +191,7 @@ body {
   cursor: pointer;
   transition-duration: 0.3s;
 }
-.wrap .add_form .confirm:hover {
+.wrap .add-form .confirm:hover {
   opacity: 0.7;
 }
 .wrap .list ul li {
@@ -243,7 +243,7 @@ body {
   content: "";
   position: absolute;
   top: 19px;
-  left: 35px;
+  left: 29px;
   height: 5px;
   border-left: 1px solid #999;
 }
@@ -266,16 +266,20 @@ body {
   width: 24px;
   height: 24px;
   background-size: 130px 90px;
-  visibility: hidden;
+  opacity: 0;
   cursor: pointer;
+  transition: all 0.2s;
 }
 .wrap .list ul li i.modify {
   right: 45px;
   background-position-x: -37px;
 }
-.wrap .list ul li i.delete {
+.wrap .list ul li i.remove {
   right: 15px;
   background-position-x: -61px;
+}
+.wrap .list ul li:hover i {
+  opacity: 1;
 }
 .wrap .list.done {
   background-color: #ddd;
@@ -291,23 +295,23 @@ body {
   .wrap header h1 {
     font-size: 20px;
   }
-  .wrap .add_form {
+  .wrap .add-form {
     padding: 8px;
     font-size: 14px;
   }
-  .wrap .add_form input {
+  .wrap .add-form input {
     font-size: 14px;
   }
-  .wrap .add_form .input-Date-Box input[type="date"] {
+  .wrap .add-form .input-date-box input[type="date"] {
     width: 80px;
     font-size: 12px;
     background-position: 64px -65px;
   }
-  .wrap .add_form .subject-box input {
+  .wrap .add-form .subject-box input {
     padding: 0 2px;
     width: calc(100% - 87px);
   }
-  .wrap .add_form .confirm {
+  .wrap .add-form .confirm {
     position: absolute;
     top: 26px;
     right: 8px;
@@ -336,7 +340,7 @@ body {
   .wrap .list ul li i.modify {
     right: 32px;
   }
-  .wrap .list ul li i.delete {
+  .wrap .list ul li i.remove {
     right: 5px;
   }
 }

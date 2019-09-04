@@ -7,13 +7,13 @@
         <title>To Do List</title>
     <link href="./css/style.css" rel="stylesheet"></head>
     <body>
-        <div class="wrap">
+        <div id="wrap" class="wrap">
             <header>
                 <h1>To Do List</h1>
             </header>
-            <section class="add_form">
-                <div class="input-Date-Box">
-                    <span>일정 : </span><span><input type="date" id="input-Date-Start" placeholder="yyyy-mm-dd">-<input type="date" id="input-Date-End" placeholder="yyyy-mm-dd"></span>
+            <section class="add-form">
+                <div class="input-date-box">
+                    <span>일정 : </span><span><input type="date" id="input-Date-Start">-<input type="date" id="input-Date-End"></span>
                 </div>
                 <div class="subject-box">
                     <span>제목 : </span><span><input type="text" id="input-Text" placeholder="할일을 적으시오"></span>
@@ -21,10 +21,24 @@
                 <button id="btn-Add" class="confirm"></button>
             </section>
             <section class="list">
-                <ul id="todolist"></ul>
+                <ul id="todolist" class="list-ul">
+                    <li sample>
+                        <label>
+                            <input type="checkbox">
+                            <span></span>
+                        </label>
+                        <div class="date-box">
+                            <span class="start-date"></span>
+                            <span class="end-date"></span>
+                        </div>
+                        <span class="work">test</span>
+                        <i class="modify"></i>
+                        <i class="remove"></i>
+                    </li>
+                </ul>
             </section>
             <section class="list done">
-                <ul id="donelist"></ul>
+                <ul id="donelist" class="list-ul"></ul>
             </section>
         </div>
     <script type="text/javascript" src="./js/ui.js"></script></body>
