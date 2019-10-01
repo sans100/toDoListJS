@@ -3,43 +3,84 @@ const donelistObj = document.querySelector('#donelist');
 const sampleObj = document.querySelector('[sample]');
 sampleObj.parentNode.removeChild(sampleObj); // 목록 li태그 삭제
 
-// 목록 데이터 담는 배열
-let workData = [
-    {
-        idx: 1,
-        subject: '테스트1',
-        startDate: '2019-08-22',
-        endDate: '2019-09-22',
-        doneFlag: false, // 진행/종료 여부
-    },
-    {
-        idx: 2,
-        subject: '테스트2',
-        startDate: '2019-08-22',
-        endDate: '2019-09-23',
-        doneFlag: false,
-    },
-    {
-        idx: 3,
-        subject: '테스트3',
-        startDate: '2019-08-22',
-        endDate: '2019-09-24',
-        doneFlag: true,
-    },
-]
+class TodoClass {
+    constructor() {
+        console.log('constructor');
+        this.localData = window.localStorage;
+        this.workData = this.load();
+    }
+    getLastIndex() {
+        const indexArray = []; // 빈 배열(data idx값) 생성
+        this.workData.forEach(function(data) {
+            indexArray.push(data['idx']);
+        });
+        let lastIndex = Math.max.apply(null, indexArray); // 배열에서 가장 큰 수
+        if (indexArray.length == 0) {
+            lastIndex = 0;
+        }
+        return lastIndex;
+    }
+    add(workText, inputDateStart, inputDateEnd, workAddTime) {
+        console.log('add');
+        const lastIndex = this.getLastIndex();
+        this.workData.push({
+            idx: lastIndex + 1,
+            subject: workText,
+            startDate: inputDateStart,
+            endDate: inputDateEnd,
+            doneFlag: false,
+            addTime: workAddTime,
+        });
+        this.save();
+    }
+    modify(modifyText, todoIndex) {
+        console.log('modify');
+        this.workData.forEach(function(data) {
+            if (data['idx'] === todoIndex) {
+                data['subject'] = modifyText;
+            }
+        });
+        this.save();
+    }
+    remove(newWorkObj, removeAsk, todoIndex) {
+        console.log('remove');
+        if (removeAsk) {
+            newWorkObj.parentNode.removeChild(newWorkObj);
+            for (let i = 0; i < this.workData.length; i++) {
+                if (this.workData[i]['idx'] === todoIndex) {
+                    this.workData.splice(i, 1);
+                }
+            }
+            this.save();
+        }
+    }
+    load() {
+        console.log('load');
+        const savedData = this.localData.getItem('workData');
+        if (savedData) {
+            return JSON.parse(savedData);
+        } else {
+            return [];
+        }
+    }
+    save() {
+        console.log('save');
+        this.localData.setItem('workData', JSON.stringify(this.workData));
+    }
+};
+
+const todoObject = new TodoClass();
 
 // 데이터 화면 출력 함수
-function printList(workData) {
+function printList(todoData) {
     let index = 1;
-    workData.forEach(function(data) { // 배열 순환
+    todoData.forEach(function(data) { // 배열 순환
         const newWorkObj = addWorkList(data['subject'], data['startDate'].substr('2'), data['endDate'].substr('2'), data['doneFlag']);
         newWorkObj['todoIndex'] = index; // 목록의 순서를 매기는 'todoIndex' 키값 설정
         index++;
     });
-    sortWork(todolistObj);
-    sortWork(donelistObj);
 };
-printList(workData);
+printList(todoObject.workData);
 
 // 체크박스 클릭 시 종료/진행 이동 함수
 function doneWork(newWorkObj) {
@@ -49,7 +90,7 @@ function doneWork(newWorkObj) {
     } else {
         todolistObj.appendChild(newWorkObj);
     }
-    workData.forEach(function(data) { // 배열 순환, 진행/종료 여부 기록
+    todoObject.workData.forEach(function(data) { // 배열 순환, 진행/종료 여부 기록
         if (data['idx'] == newWorkObj['todoIndex']) {
             if (newWorkObjUl != donelistObj) {
                 data['doneFlag'] = true;
@@ -60,6 +101,7 @@ function doneWork(newWorkObj) {
     })
     sortWork(todolistObj);
     sortWork(donelistObj);
+    todoObject.save();
     //console.log(workData);
 };
 
@@ -68,24 +110,13 @@ function modifyWork(newWorkObj) {
     let modifyText = prompt('일정을 수정하시오!');
     if(!modifyText.trim()) return false;
     newWorkObj.querySelector('.work').innerText = modifyText;
-    workData.forEach(function(data) {
-        if (data['idx'] === newWorkObj['todoIndex']) {
-            data['subject'] = modifyText;
-        }
-    });
+    todoObject.modify(modifyText, newWorkObj['todoIndex']);
 };
 
 // 목록 삭제 함수
 function removeWork(newWorkObj) {
     let removeAsk = confirm('삭제 하시겠습니다?');
-    if (removeAsk) {
-        newWorkObj.parentNode.removeChild(newWorkObj);
-        for (let i = 0; i < workData.length; i++) {
-            if (workData[i]['idx'] === newWorkObj['todoIndex']) {
-                workData.splice(i, 1);
-            }
-        }
-    }
+    todoObject.remove(newWorkObj, removeAsk, newWorkObj['todoIndex']);
 };
 
 // 목록 정렬 함수
@@ -129,7 +160,6 @@ function addWorkList(workText, startDateText, endDateText, doneFlag) {
     const endDate = newWorkObj.querySelector('.end-date');
     const btnModify = newWorkObj.querySelector('.modify');
     const btnRemove = newWorkObj.querySelector('.remove');
-    const addTime = new Date().getTime();// 목록 추가 시 시간 받아옴
     workList.innerText = workText;
     if (startDateText < 1 || startDateText === endDateText) {
         startDate.parentNode.removeChild(startDate);
@@ -139,6 +169,7 @@ function addWorkList(workText, startDateText, endDateText, doneFlag) {
     checkBox.onclick = () => {doneWork(newWorkObj)};
     btnModify.onclick = () => {modifyWork(newWorkObj)};
     btnRemove.onclick = () => {removeWork(newWorkObj)};
+    const addTime = new Date().getTime();// 목록 추가 시 시간 받아옴
     newWorkObj.setAttribute('add-time', addTime); // 속성 'add-time'에 추가 시 시간 등록
     todolistObj.appendChild(newWorkObj);
     if (doneFlag) { // true 일때 체크함
@@ -158,7 +189,7 @@ let today = new Date;
 let yy = String(today.getFullYear());
 let mm = String(today.getMonth() + 1).padStart(2, '0');
 let dd = String(today.getDate()).padStart(2, '0');
-today = `${yy}-${mm}-${dd}` 
+today = `${yy}-${mm}-${dd}`
 inputDateStart.value = today;
 inputDateEnd.value = today;
 inputText.focus();
@@ -172,19 +203,10 @@ btnAdd.onclick = () => {
     if (endDateText >= startDateText) {
         const newWorkObj = addWorkList(workText, startDateText, endDateText);
         sortWork(todolistObj);
-        const indexArray = []; // 빈 배열(data idx값) 생성
-        workData.forEach(function(data) {
-            indexArray.push(data['idx']);
-        });
-        let lastIndex = Math.max.apply(null, indexArray); // 배열에서 가장 큰 수
+        const lastIndex = todoObject.getLastIndex();
         newWorkObj['todoIndex'] = lastIndex + 1;
-        workData.push({
-            idx: lastIndex + 1,
-            subject: workText,
-            startDate: inputDateStart.value,
-            endDate: inputDateEnd.value,
-            doneFlag: false,
-        })
+        todoObject.add(workText, inputDateStart.value, inputDateEnd.value, newWorkObj.getAttribute(['add-time']));
+        //console.log(newWorkObj.getAttribute(['add-time']));
         //console.dir(newWorkObj);
     } else {
         alert('일정을 확인 하시오!');
